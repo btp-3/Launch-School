@@ -1,0 +1,33 @@
+en:
+  welcome: "Welcome to Calculator! Please enter your name: "
+  operator_prompt: "What operation would you like to perform?\n 1) Addition\n 2) Subtraction\n 3) Multiplication\n 4) Division"
+  number: "Enter a number:"
+  valid_number: "That doesn't seem right.."
+  valid_name: "That doesn't seem right.."
+  operation_choice: "Please enter 1, 2, 3, or 4"
+  adding: "Smashing those together.."
+  subtracting: "Taking one from the other.."
+  multiplying: "And the product is.."
+  dividing: "Splitting into equal pieces.."
+  zero_div: "You can't divide by zero!"
+  result: "The result is %{result}."
+  play_again: "Do you want to play again? (Y to calculate)"
+  exit: "Thanks for playing!"
+
+fr:
+  welcome: "Bienvenue dans Calculator! Veuillez entrer votre nom:"
+  operator_prompt: "What operation would you like to perform?\n 1) Addition\n 2) Subtraction\n 3) Multiplication\n 4) Division"
+  number: "Entrez un numéro:"
+  valid_number: "Cela ne semble pas juste .."
+  valid_name: "Cela ne semble pas juste .."
+  operation_choice: "Veuillez saisir 1, 2, 3 ou 4"
+  adding: "Briser ceux-ci ensemble .."
+  subtracting: "Prenant l'un de l'autre .."
+  multiplying: "Et le produit est ..."
+  dividing: "Se diviser en morceaux égaux .."
+  zero_div: "Vous ne pouvez pas diviser par zéro!"
+  result: "Le résultat est %{result}."
+  play_again: "Voulez-vous rejouer? (Y pour calculer)"
+  exit: "Merci d'avoir joué!"
+
+

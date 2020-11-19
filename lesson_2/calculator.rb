@@ -1,104 +1,123 @@
-# ask the user for two numbers
-# ask the user for an operation to perform
-# perform the operation on the two numbers
-# output the results
+# frozen_string_literal: true
 
-def prompt(message)
-	Kernel.puts("=> #{message}")
+LANGUAGE = 'en'
+require 'yaml'
+MESSAGES = YAML.load_file('calculator_messages.yml')
+
+def clear_screen
+  Kernel.system('clear')
+end
+
+def messages(message, lang = LANGUAGE)
+  MESSAGES[lang][message]
+end
+
+def prompt(key)
+  message = messages(key, LANGUAGE)
+  puts "=> #{message}"
+end
+
+def operation_to_msg(operator)
+  word = case operator
+         when '1' then prompt('adding')
+         when '2' then prompt('subtracting')
+         when '3' then prompt('multiplying')
+         when '4' then prompt('dividing')
+         end
+  word
 end
 
 def valid_number?(number)
-	number.to_i != 0
+  number.to_i.to_s == number || number.to_f.to_s == number
 end
 
-def operation_to_msg(op)
-	case op
-	when '1' then 'Adding'
-	when '2' then 'Subtracting'
-	when '3' then 'Multiplying'
-	when '4' then 'Dividing'
-	end
+def valid_name?(name)
+  true unless name.empty?
 end
 
+def obtain_operator
+  prompt('operator_prompt')
 
-prompt("Welcome to Calculator! Please enter your name: ")
+  operator = ''
+  loop do
+    operator = gets.chomp
+    %w[1 2 3 4].include?(operator) ? break : prompt('operator_choice')
+  end
 
-name = ""
-loop do 
-	name = gets().chomp()
-
-	if name.empty?()
-		prompt("That doesn't seem right..")
-	else
-		break
-	end
+  operator
 end
 
-prompt("Hi, #{name}!")
+def obtain_name
+  name = ''
 
-loop do 
+  loop do
+    name = gets.capitalize.chomp
+    name.empty? ? prompt('valid_name') : break
+  end
 
-	number1 = ""
-	loop do 
-		prompt("What's the first number?")
-		number1 = Kernel.gets().chomp()
-
-		if valid_number?(number1)
-			break
-		else
-			prompt("Hmm.. that doesn't look like a number!")
-		end
-	end
-
-	number2 = ""
-	loop do 
-		prompt("What's the second number?")
-		number2 = Kernel.gets().chomp()
-
-		if valid_number?(number2)
-			break
-		else
-			prompt("Hmm.. that doesn't look like a number!")
-		end
-	end
-
-	operator_prompt = <<-MSG
-		What operation would you like to perform?
-		1) Addition
-		2) Subtraction
-		3) Multiplication
-		4) Division
-
-	MSG
-
-	prompt(operator_prompt)
-	
-	operator = ""
-	loop do 
-		operator = Kernel.gets().chomp()
-
-		if %w(1 2 3 4).include?(operator)
-			break
-		else
-			prompt("Please enter 1, 2, 3, or 4")
-		end
-	end
-
-	prompt("#{operation_to_msg(operator)} the two numbers...")
-
-	result = case operator
-					 when '1' then number1.to_i() + number2.to_i()
-					 when '2' then number1.to_i() - number2.to_i()
-					 when '3' then number1.to_i() * number2.to_i()
-					 when '4' then number1.to_f() / number2.to_f()
-	end
-
-	prompt("The result is #{result}.")
-
-	prompt("Do you want to play again? (Y to calculate)")
-	answer = gets().chomp()
-	break unless answer.downcase.start_with?('y')
-
+  name
 end
 
-prompt("Thanks for playing!")
+def obtain_num
+  number = ''
+  loop do
+    prompt('number')
+    number = gets.chomp
+
+    valid_number?(number) ? break : prompt('valid_number')
+  end
+
+  number
+end
+
+def zero_div_error?(num)
+  num == '0'
+end
+
+def calculate(num1, num2, operator)
+  result = case operator
+           when '1' then num1.to_i + num2.to_i
+           when '2' then num1.to_i - num2.to_i
+           when '3' then num1.to_i * num2.to_i
+           when '4'
+             zero_div_error?(num1) ? prompt('zer_div') : (num1.to_i / num2.to_f)
+           end
+  operation_to_msg(operator)
+  puts format(messages('result'), result: result)
+end
+
+def calculate_again?
+  answer = ''
+  loop do
+    prompt('play_again')
+    answer = gets.chomp
+    break
+  end
+
+  answer
+end
+
+# --------------------------------------------- #
+
+clear_screen
+
+prompt('welcome')
+
+name = obtain_name
+puts "Hi #{name}! Let's get started!"
+
+loop do
+  number1 = obtain_num
+  number2 = obtain_num
+
+  operator = obtain_operator
+
+  calculate(number1, number2, operator)
+
+  answer = calculate_again?
+  break unless answer.downcase.start_with?('y')
+
+  clear_screen
+end
+
+prompt('exit')
